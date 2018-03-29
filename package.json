@@ -27,5 +27,8 @@
     "nodemon": "^1.17.2",
     "npm": "^5.8.0",
     "request": "^2.85.0"
-  }
+  },
+    "start": "node server.js"
+  
 }
+
