@@ -22,7 +22,8 @@ function displayResults(scrapedData) {
                     pDetails.text(row.details);
 
                     var pLink = $('<p>');
-                    pLink.text(row.link)
+                    // plink.attr('href', row.link);// link.attr("href");
+                    pLink.text(row.link);
 
                         divReview.append(pTitle);
                         divReview.append(pLink);
@@ -46,15 +47,15 @@ function displayResults(scrapedData) {
 
                 thirdTd.append(row.notes);
 
+                var fourthTd = $("<td>");
+
         tr.append(firstTd);
         tr.append(secondTd);
         tr.append(thirdTd);
 
-        // Append each of the animal's properties to the table
         $("tbody").append(tr);
 
 
-        //    "<td>" + animal.whatIWouldReallyCallIt + "</td></tr>");
 
     });
 }
@@ -70,9 +71,9 @@ function displayResults(scrapedData) {
 // 1: On Load
 // ==========
 
-// First thing: ask the back end for json with all animals
+
 $.getJSON("/all", function (data) {
-    // Call our function to generate a table body
+    
     displayResults(data);
 
 });
@@ -83,12 +84,11 @@ $.getJSON("/all", function (data) {
 $("#scrape").on("click", function () {
     // Set new column as currently-sorted (active)
 
-
     $.getJSON("/scrape", function (scrapedData) {
+
         //make function that clears table in the dom and then fills it by querying the database
-
-
-
+    
+        $("tbody").empty();
         // Call our function to generate a table body
         displayResults(scrapedData);
     });
@@ -102,7 +102,6 @@ $(document).on('click', '.save', function(){
 
     //then here make an ajax call that hits thatroute
     $.getJSON("/save-note/" + id, function (data) {
-        debugger;
         var td = that.parent()
         that.remove();
         td.append('<p>this has been saved</p>')
@@ -110,8 +109,42 @@ $(document).on('click', '.save', function(){
 
 });
 
+$(document).on("click", ".deleteNote", function() {
+    // Empty the notes from the note section
+  
+    // Save the id from the p tag
+    var thisId = $(this).attr("data-id");
+    //console.log(thisId);
+    // Now make an ajax call for the Article
+    $.ajax({
+      method: "POST",
+      url: "/delete/note/" + thisId
+    })
+      // With that done, add the note information to the page
+      .done(function(data) {
+        location.reload();
+      });
+  });
 
 
+  app.get("/delete/:id", function(req, res) {
+    // Remove a note using the objectID
+    db.scrapedData.remove({
+      "_id": mongojs.ObjectID(req.params.id)
+    }, function(error, removed) {
+      // Log any errors from mongojs
+      if (error) {
+        console.log(error);
+        res.send(error);
+      }
+      // Otherwise, send the mongojs response to the browser
+      // This will fire off the success function of the ajax request
+      else {
+        console.log(removed);
+        res.json(removed);
+      }
+    });
+  });
 
 //   // When user clicks the name sort button, display the table sorted by name
 //   $("#name-sort").on("click", function() {
