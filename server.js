@@ -10,7 +10,7 @@ var app = express();
 app.use(express.static("public"));
 
 // Database configuration
-var databaseUrl = "scraper";
+var databaseUrl = process.env.MONGODB_URI || "mongodb://localhost/scraper";;
 var collections = ["scrapedData"];
 
 // Hook mongojs configuration to the db variable
@@ -129,8 +129,6 @@ app.get("/scrape", function (req, res) {
 });
 
 
-database
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
 
 var port = process.env.PORT || 3011;
 
