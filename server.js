@@ -129,10 +129,13 @@ app.get("/scrape", function (req, res) {
 });
 
 
+database
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
 
+var port = process.env.PORT || 3011;
 
 // Listen on port 3000
-app.listen(3011, function () {
+app.listen(port, function () {
   console.log("App running on port 3011!");
 });
 
