@@ -106,7 +106,7 @@ app.get("/scrape", function (req, res) {
         // //   /Insert the data in the scrapedData db
         db.scrapedData.insert({
           title: title,
-          link: "link",
+          link: link,
           photo: photo,
           details: details
         },
